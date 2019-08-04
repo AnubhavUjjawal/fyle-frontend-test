@@ -1,28 +1,47 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <b-container fluid>
+    <NavBar />
+    <br>
+    <b-row>
+        <b-col>
+            <BankSearch />
+        </b-col>
+        <b-col>
+            <ItemsPerPage v-model="perPage"/>
+        </b-col>
+    </b-row>
+    <br>
+    <BankTable :items="items" :perPage="perPage" />
+  </b-container>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+    import NavBar from "./components/NavBar";
 
-export default {
-  name: 'app',
-  components: {
-    HelloWorld
-  }
-}
+    import BankSearch from "./components/BankSearch";
+    import BankTable from "./components/BankTable";
+    import ItemsPerPage from "./components/ItemsPerPage";
+
+    import { loadBanks } from "./api/loadBanks";
+    export default {
+    name: "app",
+    components: {
+        NavBar,
+        BankSearch,
+        BankTable,
+        ItemsPerPage
+    },
+    created() {
+        loadBanks()
+            .then((data) => {
+                this.items = data;
+            });
+    },
+    data() {
+        return {
+            items: [],
+            perPage: 6
+        };
+    },
+};
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
