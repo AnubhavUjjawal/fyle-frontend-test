@@ -11,7 +11,7 @@
       </b-col>
     </b-row>
     <br />
-    <BankTable :items="items" :perPage="perPage" :filter="searchText"/>
+    <BankTable :items="items" :perPage="perPage" :filter="searchText" />
   </b-container>
 </template>
 
@@ -22,7 +22,7 @@ import BankSearch from "./components/BankSearch";
 import BankTable from "./components/BankTable";
 import ItemsPerPage from "./components/ItemsPerPage";
 
-import { loadBanks } from "./api/loadBanks";
+import { getBanks } from "./api/loadBanks";
 export default {
   name: "app",
   components: {
@@ -32,7 +32,7 @@ export default {
     ItemsPerPage
   },
   created() {
-    loadBanks().then(data => {
+    getBanks().then(data => {
       this.items = data;
     });
   },

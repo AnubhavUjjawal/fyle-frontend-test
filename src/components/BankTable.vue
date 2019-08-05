@@ -23,11 +23,17 @@
         <b-spinner class="align-middle"></b-spinner>
         <strong> Loading...</strong>
       </div>
+      <template slot="favorite" slot-scope="items">
+        <b-button @click="toggleFavorite(items.item)">
+          {{ items.item.favorite ? "Mark as not Favorite" : "Mark as Favorite"  }}
+        </b-button>
+      </template>
     </b-table>
   </div>
 </template>
 
 <script>
+import { toggleFavorites } from "../api/loadBanks";
 export default {
   name: "BankTable",
   data() {
@@ -39,7 +45,8 @@ export default {
         "city",
         "district",
         "state",
-        "bank_name"
+        "bank_name",
+        "favorite"
       ],
       currentPage: 1,
       itemsCount: 0
@@ -60,6 +67,10 @@ export default {
       // console.log(filteredItems)
       this.itemsCount = filteredItems.length;
       this.currentPage = 1;
+    },
+    toggleFavorite(item) {
+      toggleFavorites(item.ifsc, !item.favorite);
+      item.favorite = ! item.favorite;
     }
   },
 };

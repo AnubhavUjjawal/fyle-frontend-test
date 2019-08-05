@@ -18,3 +18,53 @@ export async function loadBanks() {
     localStorage.bank_data = JSON.stringify(bank_data);
     return bank_data;
 }
+
+export async function getFavoriteBanks() {
+    if (localStorage.favorite_bank_data && localStorage.favorite_bank_data.constructor == String) {
+        try {
+            let bank_data = JSON.parse(localStorage.favorite_bank_data);
+            return bank_data;
+        }
+        catch(err) {
+            // catching JSON.parse error
+            // console.log(err);
+        }
+    }
+
+    return {};
+}
+
+export async function getBanks() {
+    let banks = await loadBanks();
+    let favoriteBanks = await getFavoriteBanks();
+    for(let i=0; i<banks.length; i++) {
+        try {
+            if(favoriteBanks[banks[i].ifsc] == true){
+                banks[i].favorite = true;
+            }
+            else banks[i].favorite = false;
+        }
+        catch(err) {
+            banks[i].favorite = false;
+        }
+    }
+    return banks;
+}
+
+export function toggleFavorites(ifsc, val) {
+
+    try {
+        let bank_data = JSON.parse(localStorage.favorite_bank_data);
+        bank_data[ifsc] = val;
+        localStorage.favorite_bank_data = JSON.stringify(bank_data);
+    }
+    catch(err) {
+        // catching JSON.parse error
+        // console.log(err);
+        let bank_data = {};
+        bank_data[ifsc] = val;
+        localStorage.favorite_bank_data = JSON.stringify(bank_data);
+    }
+
+
+}
