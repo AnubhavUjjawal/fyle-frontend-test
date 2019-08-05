@@ -9,9 +9,14 @@
       <b-col>
         <ItemsPerPage v-model="perPage" />
       </b-col>
+      <b-col>
+        <b-button @click="viewAllBanks = !viewAllBanks">
+          {{ loading? "Loading.." : viewAllBanks ? "Switch to Favorite Banks":"Show all Banks"}}
+        </b-button>
+      </b-col>
     </b-row>
-    <br />
-    <BankTable :items="items" :perPage="perPage" :filter="searchText" />
+    <br>
+    <BankTable :items="tableItems" :perPage="perPage" :filter="searchText" />
   </b-container>
 </template>
 
@@ -22,7 +27,7 @@ import BankSearch from "./components/BankSearch";
 import BankTable from "./components/BankTable";
 import ItemsPerPage from "./components/ItemsPerPage";
 
-import { getBanks } from "./api/loadBanks";
+import { getBanks, getFavoriteBanks } from "./api/loadBanks";
 export default {
   name: "app",
   components: {
@@ -32,16 +37,36 @@ export default {
     ItemsPerPage
   },
   created() {
+    this.loading = true;
     getBanks().then(data => {
       this.items = data;
+      this.loading = false;
     });
   },
   data() {
     return {
       items: [],
       perPage: 6,
-      searchText: ""
+      searchText: "",
+      viewAllBanks: true,
+      loading: false
     };
+  },
+  computed: {
+    tableItems() {
+      return this.viewAllBanks?this.items:this.favoriteItems(); 
+    }
+  },
+  methods: {
+    favoriteItems() {
+      let favBanks = [];
+      let favItems = getFavoriteBanks();
+      for(let i=0; i<this.items.length; i++) {
+        if(favItems[this.items[i].ifsc] == true)
+          favBanks.push(this.items[i]);
+      }
+      return favBanks;
+    }
   }
   // updated(){
   //   console.log(this.searchText)

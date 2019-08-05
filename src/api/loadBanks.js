@@ -19,7 +19,7 @@ export async function loadBanks() {
     return bank_data;
 }
 
-export async function getFavoriteBanks() {
+export function getFavoriteBanks() {
     if (localStorage.favorite_bank_data && localStorage.favorite_bank_data.constructor == String) {
         try {
             let bank_data = JSON.parse(localStorage.favorite_bank_data);
@@ -36,7 +36,7 @@ export async function getFavoriteBanks() {
 
 export async function getBanks() {
     let banks = await loadBanks();
-    let favoriteBanks = await getFavoriteBanks();
+    let favoriteBanks = getFavoriteBanks();
     for(let i=0; i<banks.length; i++) {
         try {
             if(favoriteBanks[banks[i].ifsc] == true){
