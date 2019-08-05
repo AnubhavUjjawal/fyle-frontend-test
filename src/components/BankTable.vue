@@ -24,7 +24,7 @@
         <strong> Loading...</strong>
       </div>
       <template slot="favorite" slot-scope="items">
-        <b-button @click="toggleFavorite(items.item)">
+        <b-button @click="toggleFavorite(items.item)" v-if="items.item.district!='nothing to show'">
           {{ items.item.favorite ? "Mark as not Favorite" : "Mark as Favorite"  }}
         </b-button>
       </template>

@@ -65,6 +65,9 @@ export default {
         if(favItems[this.items[i].ifsc] == true)
           favBanks.push(this.items[i]);
       }
+      if(favBanks.length == 0) {
+        favBanks.push({ "district": "nothing to show"});
+      }
       return favBanks;
     }
   }
