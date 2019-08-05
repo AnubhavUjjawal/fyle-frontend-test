@@ -13,7 +13,7 @@
 export default {
     name: "ItemsPerPage",
     props: ["value"],
-    data: function () {
+    data() {
         return {
             itemsPerPage: this.value,
         }

@@ -6,33 +6,61 @@
       :per-page="perPage"
       aria-controls="my-table"
     ></b-pagination>
-    <b-table striped hover :items="items" :fields="fields" :busy="isBusy" :per-page="perPage" :current-page="currentPage" responsive outlined>
-        <div slot="table-busy" class="text-center text-info my-2">
-            <b-spinner class="align-middle"></b-spinner>
-            <strong>Loading...</strong>
-        </div>
+    <b-table
+      :items="items"
+      :fields="fields"
+      :busy="isBusy"
+      :per-page="perPage"
+      :filter="filter"
+      @filtered="onFiltered"
+      :current-page="currentPage"
+      striped
+      hover
+      responsive
+      outlined
+    >
+      <div slot="table-busy" class="text-center text-info my-2">
+        <b-spinner class="align-middle"></b-spinner>
+        <strong> Loading...</strong>
+      </div>
     </b-table>
   </div>
 </template>
 
 <script>
-  export default {
-    name: "BankTable",
-    data() {
-        // console.log("chainging data", this.props)
-        return {
-            fields: ["ifsc", "branch", "address", "city", "district", "state", "bank_name"],
-            currentPage: 1,
-        }
+export default {
+  name: "BankTable",
+  data() {
+    return {
+      fields: [
+        "ifsc",
+        "branch",
+        "address",
+        "city",
+        "district",
+        "state",
+        "bank_name"
+      ],
+      currentPage: 1,
+      itemsCount: 0
+    };
+  },
+  computed: {
+    isBusy() {
+      return this.items.length > 0 ? false : true;
     },
-    computed: {
-        isBusy() {
-            return this.items.length > 0 ? false:true;
-        },
-        rows() {
-            return this.items.length;
-        }
+    rows() {
+      return this.filter != "" ? this.itemsCount:this.items.length;
     },
-    props: ["items", "perPage"]
-  }
+  },
+  props: ["items", "perPage", "filter"],
+  methods: {
+    onFiltered(filteredItems) {
+      // Trigger pagination to update the number of buttons/pages due to filtering
+      // console.log(filteredItems)
+      this.itemsCount = filteredItems.length;
+      this.currentPage = 1;
+    }
+  },
+};
 </script>

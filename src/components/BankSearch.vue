@@ -4,7 +4,7 @@
       <label for="Search here">Search</label>
     </b-col>
     <b-col sm="8">
-        <b-form-input v-model="searchText" placeholder="Enter Bank Name, City, etc.."></b-form-input>
+      <b-form-input :value="filter" @input="updateBankSearch" placeholder="Enter Bank Name, City, etc.."></b-form-input>
     </b-col>
   </div>
 </template>
@@ -12,10 +12,16 @@
 <script>
   export default {
     name: "BankSearch",
+    props: ["value"],
     data() {
-        return {
-            searchText: ""
-        }
+      return {
+        filter: this.value
+      }
+    },
+    methods: {
+      updateBankSearch(val){
+        this.$emit("input", val) 
+      }
     }
   }
 </script>
